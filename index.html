@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La meva setmana</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="La setmana">
+<meta name="theme-color" content="#ECEDE7">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22La%20meva%20setmana%22%2C%22short_name%22%3A%22Setmana%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23ECEDE7%22%2C%22theme_color%22%3A%22%23ECEDE7%22%2C%22start_url%22%3A%22.%22%7D">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%235145CB'/%3E%3Ctext x='90' y='120' font-size='96' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3ES%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#ECEDE7;--card:#FFFFFF;--ink:#22232A;--muted:#77767F;--line:#E3E3DC;
+  --brand:#5145CB;--brand-soft:#EBEAFB;--done:#1B9E6B;--done-soft:#E1F4EC;
+  --coffee:#8A5A2B;--coffee-soft:#F1E7DC;--hard:#D9563C;--hard-soft:#FBE6E0;
+  --amber:#B8860B;--amber-soft:#F6ECCF;
+  --radius:16px;--shadow:0 1px 2px rgba(30,30,40,.05),0 6px 18px rgba(30,30,40,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+  line-height:1.45;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+h1,h2,h3{font-family:"Space Grotesk","Inter",sans-serif}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+
+header{padding:calc(env(safe-area-inset-top) + 18px) 0 6px}
+.brand{font-family:"Space Grotesk";font-weight:700;font-size:15px;letter-spacing:.02em;color:var(--brand)}
+.weeknav{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.weeknav h1{font-size:22px;margin:0;font-weight:600}
+.weeknav .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.arrow{width:40px;height:40px;border-radius:12px;background:var(--card);box-shadow:var(--shadow);display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+.arrow:active{transform:scale(.94)}
+
+.topbtn{width:100%;display:flex;align-items:center;gap:10px;background:var(--brand);color:#fff;font-weight:600;font-size:14.5px;
+  padding:13px 15px;border-radius:var(--radius);box-shadow:var(--shadow);margin:16px 0 10px}
+.topbtn .arr{margin-left:auto;font-size:18px}
+.topbtn:active{opacity:.9}
+.shopdone{width:100%;text-align:center;font-size:13px;color:var(--muted);margin:16px 0 8px;padding:8px}
+.shopdone b{color:var(--done)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:20px;
+  background:var(--done-soft);color:var(--done);margin-bottom:6px}
+.chip.warn{background:var(--amber-soft);color:var(--amber)}
+.chip.bad{background:var(--hard-soft);color:var(--hard)}
+
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 8px}
+.stat{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px}
+.stat .n{font-family:"Space Grotesk";font-weight:700;font-size:22px;line-height:1}
+.stat .l{font-size:11.5px;color:var(--muted);margin-top:5px}
+.stat.done .n{color:var(--done)}.stat.sport .n{color:var(--brand)}.stat.coffee .n{color:var(--coffee)}
+
+.day{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;border:1px solid transparent}
+.day.hard{border-color:var(--hard-soft)}
+.dhead{display:flex;align-items:center;gap:10px;padding:13px 14px 11px}
+.dname{font-family:"Space Grotesk";font-weight:600;font-size:16px;text-transform:capitalize}
+.ddate{font-size:12px;color:var(--muted)}
+.today-pill{font-size:10.5px;font-weight:600;color:#fff;background:var(--brand);padding:2px 8px;border-radius:20px}
+.hard-pill{font-size:10.5px;font-weight:600;color:var(--hard);background:var(--hard-soft);padding:2px 8px;border-radius:20px;margin-left:auto}
+
+.row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}
+.rlabel{flex:1;min-width:0}
+.rlabel .k{font-size:11px;color:var(--muted)}
+.rlabel .v{font-size:14.5px;font-weight:500;margin-top:1px;word-break:break-word}
+.rlabel .v.empty{color:var(--muted);font-weight:400}
+.mealbtn{text-align:left;display:block;width:100%}
+
+.chk{flex:0 0 auto;width:30px;height:30px;border-radius:9px;border:1.8px solid var(--line);background:var(--card);display:grid;place-items:center;transition:.15s}
+.chk svg{width:16px;height:16px;stroke:var(--muted);stroke-width:2.4;fill:none;opacity:.5}
+.chk.on{background:var(--done);border-color:var(--done)}.chk.on svg{stroke:#fff;opacity:1}
+.chk:active{transform:scale(.9)}
+
+.acts{padding:4px 14px 6px;border-top:1px solid var(--line)}
+.act{display:flex;align-items:center;gap:10px;padding:7px 0}
+.act .time{font-size:12.5px;font-weight:600;color:var(--brand);flex:0 0 auto;min-width:44px;text-align:left;padding:2px 0;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px}
+.act .time:active{opacity:.6}
+.act .name{flex:1;font-size:14px}
+.act.on .name{color:var(--muted);text-decoration:line-through}
+.act .del{color:var(--muted);font-size:16px;width:26px;height:26px;border-radius:8px}
+.act .del:active{background:var(--line)}
+.addact{margin:2px 0 8px;font-size:13px;font-weight:600;color:var(--brand);padding:6px 0}
+
+.coffee-row{padding:11px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.coffee-btn{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;padding:8px 14px;border-radius:20px;background:var(--bg);color:var(--muted);transition:.15s}
+.coffee-btn.on{background:var(--coffee-soft);color:var(--coffee)}
+.coffee-btn:active{transform:scale(.96)}
+
+.regen{width:100%;margin:2px 0 26px;padding:12px;border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);font-weight:600;font-size:14px;color:var(--brand)}
+
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:8px 0 calc(6px + env(safe-area-inset-bottom));z-index:40}
+.tabs .inner{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:var(--muted);font-weight:500;padding:4px}
+.tab svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.9;fill:none}
+.tab.active{color:var(--brand)}
+
+.page{display:none}.page.active{display:block}
+.ptitle{font-family:"Space Grotesk";font-weight:600;font-size:20px;margin:22px 0 4px}
+.psub{font-size:13px;color:var(--muted);margin:0 0 14px}
+.cat{font-family:"Space Grotesk";font-weight:600;font-size:14px;margin:18px 0 8px}
+.mcard{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:11px 13px;margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mcard.off{opacity:.5}
+.mcard .mtop{flex:1 1 100%;display:flex;align-items:center;gap:10px}
+.mcard .mname{flex:1;font-size:14.5px;font-weight:500}
+.mcard .ming{flex:1 1 100%;font-size:12px;color:var(--muted);margin-top:-2px}
+.mcard .mtools{flex:1 1 100%;display:flex;gap:8px;align-items:center}
+.tag{font-size:10.5px;font-weight:600;color:var(--hard);background:var(--hard-soft);padding:2px 8px;border-radius:20px}
+.mini{font-size:12px;font-weight:600;padding:6px 10px;border-radius:9px;background:var(--bg);color:var(--muted)}
+.mini.on{background:var(--brand-soft);color:var(--brand)}
+.mini.fix.on{background:var(--hard-soft);color:var(--hard)}
+.mdel{color:var(--muted);width:30px;height:30px;border-radius:9px;font-size:17px;margin-left:auto}
+.mdel:active{background:var(--line)}
+.adder{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+.adder input,.adder select{font-family:inherit;font-size:14px;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink)}
+.adder .nm{flex:1;min-width:120px}.adder select{flex:0 0 auto;width:120px}
+.adder .ing{flex:1 1 100%}
+.adder .go{flex:0 0 auto;background:var(--brand);color:#fff;font-weight:600;padding:0 16px;border-radius:11px;font-size:14px}
+
+.sheet{position:fixed;inset:0;z-index:60;display:none}.sheet.open{display:block}
+.sheet .bg{position:absolute;inset:0;background:rgba(20,20,25,.4)}
+.sheet .panel{position:absolute;left:0;right:0;bottom:0;background:var(--bg);border-radius:22px 22px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));max-height:80vh;overflow:auto;max-width:560px;margin:0 auto}
+.sheet h3{font-family:"Space Grotesk";font-size:17px;margin:2px 0 12px}
+.opt{width:100%;text-align:left;background:var(--card);border-radius:12px;padding:13px 14px;margin-bottom:7px;font-size:14.5px;box-shadow:var(--shadow)}
+.opt:active{background:var(--brand-soft)}
+.opt small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.shopitem{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:7px;box-shadow:var(--shadow);font-size:14.5px}
+.shopitem.on{color:var(--muted);text-decoration:line-through}
+.sheetgo{width:100%;background:var(--done);color:#fff;font-weight:600;padding:14px;border-radius:12px;font-size:15px;margin-top:6px}
+.timewrap{display:flex;gap:10px;align-items:center;margin:8px 0}
+.timewrap input{flex:1;font-family:inherit;font-size:16px;padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--card)}
+
+.bigstat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 4px}
+.bigstat .b{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+.bigstat .b .n{font-family:"Space Grotesk";font-weight:700;font-size:30px;line-height:1}
+.bigstat .b .l{font-size:12.5px;color:var(--muted);margin-top:6px}
+.streak{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin:10px 0;display:flex;align-items:center;gap:14px}
+.streak .n{font-family:"Space Grotesk";font-weight:700;font-size:34px}
+.streak .l{font-size:13px;color:var(--muted)}
+.barrow{display:flex;align-items:center;gap:10px;margin:7px 0}
+.barrow .bn{flex:0 0 120px;font-size:13px}
+.bartrack{flex:1;height:10px;background:var(--line);border-radius:6px;overflow:hidden}
+.barfill{height:100%;background:var(--brand);border-radius:6px}
+.barval{flex:0 0 30px;text-align:right;font-size:12.5px;color:var(--muted)}
+
+.hint{font-size:12px;color:var(--muted);text-align:center;margin:14px 0 24px;padding:0 20px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand">LA MEVA SETMANA</div>
+    <div class="weeknav">
+      <button class="arrow" onclick="changeWeek(-1)">‹</button>
+      <div style="text-align:center"><h1>Setmana</h1><div class="sub" id="weekSub"></div></div>
+      <button class="arrow" onclick="changeWeek(1)">›</button>
+    </div>
+  </header>
+
+  <section class="page active" id="page-week">
+    <div id="shopBanner"></div>
+    <div id="sportChip"></div>
+    <div class="summary">
+      <div class="stat done"><div class="n" id="sDone">0/5</div><div class="l">dinars fets</div></div>
+      <div class="stat sport"><div class="n" id="sSport">0</div><div class="l">activitats fetes</div></div>
+      <div class="stat coffee"><div class="n" id="sCoffee">0</div><div class="l">cafès</div></div>
+    </div>
+    <div id="days"></div>
+    <button class="regen" onclick="regenerate()">↻ Reorganitzar els dinars d'aquesta setmana</button>
+  </section>
+
+  <section class="page" id="page-meals">
+    <h2 class="ptitle">Els meus àpats</h2>
+    <p class="psub">Activa els que vols al sorteig. <b>Fix</b> = surt sí o sí un cop per setmana. Els ingredients alimenten la llista de la compra.</p>
+    <div class="adder">
+      <input class="nm" id="newMealName" placeholder="Nou àpat…" autocomplete="off">
+      <select id="newMealCat"></select>
+      <input class="ing" id="newMealIng" placeholder="Ingredients separats per comes (opcional)" autocomplete="off">
+      <button class="go" onclick="addMeal()">Afegeix</button>
+    </div>
+    <div id="mealsList"></div>
+  </section>
+
+  <section class="page" id="page-acts">
+    <h2 class="ptitle">Les meves activitats</h2>
+    <p class="psub">La llista d'on tries quan afegeixes una activitat a un dia (amb hora).</p>
+    <div class="adder">
+      <input class="nm" id="newActName" placeholder="Nova activitat…" autocomplete="off">
+      <button class="go" onclick="addActivity()">Afegeix</button>
+    </div>
+    <div id="actsList"></div>
+    <p class="hint">Les dades es guarden només en aquest dispositiu. Al mòbil: <b>Compartir → Afegir a la pantalla d'inici</b>.</p>
+  </section>
+
+  <section class="page" id="page-stats">
+    <h2 class="ptitle">Estadístiques</h2>
+    <p class="psub">Comptador de tot el que has anat completant.</p>
+    <div id="statsBody"></div>
+  </section>
+</div>
+
+<nav class="tabs">
+  <div class="inner">
+    <button class="tab active" data-page="week" onclick="showPage('week')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Setmana</button>
+    <button class="tab" data-page="meals" onclick="showPage('meals')">
+      <svg viewBox="0 0 24 24"><path d="M5 3v18M5 8c3 0 3-5 0-5M19 3c-2 0-3 3-3 6s1 3 1 6v6"/></svg>Àpats</button>
+    <button class="tab" data-page="acts" onclick="showPage('acts')">
+      <svg viewBox="0 0 24 24"><path d="M6 12h12M4 9v6M20 9v6M8 7v10M16 7v10"/></svg>Activitats</button>
+    <button class="tab" data-page="stats" onclick="showPage('stats')">
+      <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Estadíst.</button>
+  </div>
+</nav>
+
+<div class="sheet" id="sheet">
+  <div class="bg" onclick="closeSheet()"></div>
+  <div class="panel"><h3 id="sheetTitle"></h3><div id="sheetBody"></div></div>
+</div>
+
+<script>
+/* ---------- Emmagatzematge (per dispositiu) ---------- */
+const mem={};
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):structuredClone(d);}catch(e){return k in mem?mem[k]:structuredClone(d);}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){mem[k]=v;}}
+};
+
+/* ---------- Àpats per defecte (amb ingredients) ---------- */
+const CATS=["Pasta","Arròs","Llegums","Amanides","Carn","Peix","Ous / plats lleugers"];
+const CATEMOJI={"Pasta":"🍝","Arròs":"🍚","Llegums":"🫘","Amanides":"🥗","Carn":"🍗","Peix":"🐟","Ous / plats lleugers":"🥚"};
+const DEFAULT_MEALS=[
+ ["Spaghetti amb ceba i pollastre","Pasta","spaghetti, pit de pollastre, ceba, oli d'oliva, pebre, espècies"],
+ ["Spaghetti amb ceba i vedella","Pasta","spaghetti, vedella picada, ceba, oli d'oliva, pebre"],
+ ["Spaghetti carbonara","Pasta","spaghetti, ou, parmesà, panceta, pebre negre"],
+ ["Macarrons amb tomàquet i tonyina","Pasta","macarrons, tomàquet triturat, tonyina, ceba, oli d'oliva"],
+ ["Macarrons a la bolonyesa","Pasta","macarrons, carn picada, tomàquet, ceba, pastanaga, api, oli d'oliva"],
+ ["Pasta amb pesto i pollastre","Pasta","pasta, pesto, pollastre, tomàquet cherry, parmesà"],
+ ["Canelons","Pasta","canelons, carn picada, beixamel, tomàquet, formatge ratllat"],
+ ["Arròs a la cubana","Arròs","arròs, tomàquet, ou, plàtan, oli d'oliva"],
+ ["Arròs amb verdures i ou","Arròs","arròs, carbassó, pebrot, pastanaga, pèsols, ou, oli d'oliva"],
+ ["Arròs amb pollastre i verdures","Arròs","arròs, pollastre, pebrot, ceba, pèsols, mongeta verda"],
+ ["Risotto de bolets i pollastre","Arròs","arròs arbori, bolets, pollastre, ceba, brou, parmesà, oli d'oliva"],
+ ["Llenties amb arròs i verdures","Llegums","llenties, arròs, ceba, pastanaga, pebrot, tomàquet"],
+ ["Cigrons amb espinacs i ou","Llegums","cigrons, espinacs, ou, ceba, tomàquet, all, oli d'oliva"],
+ ["Amanida de cigrons amb tonyina","Llegums","cigrons, tonyina, tomàquet, pebrot, ceba, olives, oli d'oliva"],
+ ["Mongetes seques amb botifarra i verdures","Llegums","mongetes seques, botifarra, ceba, tomàquet, pebrot, all"],
+ ["Amanida de llenties","Llegums","llenties, tomàquet, cogombre, pastanaga, pebrot, ou dur, oli d'oliva"],
+ ["Amanida de tonyina i ou","Amanides","enciam, tomàquet, tonyina, ou dur, pastanaga, blat de moro, oli d'oliva"],
+ ["Amanida Cèsar amb pollastre","Amanides","enciam, pollastre, parmesà, crostons, salsa Cèsar"],
+ ["Amanida de pasta amb tonyina","Amanides","pasta, tonyina, tomàquet, olives, blat de moro, cogombre, oli d'oliva"],
+ ["Amanida caprese amb pollastre","Amanides","tomàquet, mozzarella, alfàbrega, pollastre, oli d'oliva"],
+ ["Pollastre al forn amb patates i verdures","Carn","pollastre, patata, ceba, pebrot, carbassó, oli d'oliva"],
+ ["Filet de vedella amb verdures i patata","Carn","filet de vedella, carbassó, pebrot, xampinyons, patata, oli d'oliva"],
+ ["Hamburguesa casolana amb patata i amanida","Carn","carn picada, pa d'hamburguesa, tomàquet, enciam, ceba, patata, oli d'oliva"],
+ ["Pit de pollastre a la planxa amb arròs i verdures","Carn","pollastre, arròs, bròquil, pastanaga, carbassó, oli d'oliva"],
+ ["Escalopa amb amanida i patata","Carn","vedella o pollastre, ou, pa ratllat, enciam, patata, oli d'oliva"],
+ ["Botifarra amb mongetes i amanida","Carn","botifarra, mongetes seques, enciam, tomàquet, oli d'oliva"],
+ ["Salmó al forn amb patata i verdures","Peix","salmó, patata, bròquil, pastanaga, carbassó, oli d'oliva, llimona"],
+ ["Lluç a la planxa amb patata i amanida","Peix","lluç, patata, enciam, tomàquet, ceba, oli d'oliva"],
+ ["Truita de tonyina amb amanida i pa","Peix","ous, tonyina, enciam, tomàquet, pa integral, oli d'oliva"],
+ ["Bacallà amb samfaina i patata","Peix","bacallà, albergínia, carbassó, pebrot, tomàquet, ceba, patata"],
+ ["Peix al forn amb verdures i arròs","Peix","lluç o orada, arròs, carbassó, pebrot, ceba, tomàquet, oli d'oliva"],
+ ["Truita de patates amb amanida","Ous / plats lleugers","ous, patata, ceba, enciam, tomàquet, oli d'oliva"],
+ ["Truita d'espinacs amb patata i amanida","Ous / plats lleugers","ous, espinacs, patata, enciam, tomàquet, oli d'oliva"]
+];
+const DEFAULT_ACTS=["Jugar a futbol","Anar a córrer","Gimnàs","Bici","Natació","Caminada","Pàdel"];
+
+const BUCKETS=[
+ {id:"pa",cats:["Pasta","Arròs"]},
+ {id:"lle",cats:["Llegums"]},
+ {id:"pe",cats:["Peix"]},
+ {id:"ca",cats:["Carn"]},
+ {id:"am",cats:["Amanides","Ous / plats lleugers"]}
+];
+function bucketOf(m){const b=BUCKETS.find(x=>x.cats.includes(m.cat));return b?b.id:null;}
+
+/* ---------- Estat + migració ---------- */
+const MEALS_VERSION=2;
+function freshMeals(){return DEFAULT_MEALS.map((m,i)=>({id:"m"+i,name:m[0],cat:m[1],ing:m[2],active:true,fixed:false}));}
+let meals=store.get("meals",null);
+let mealsUpgraded=false;
+if(!meals){meals=freshMeals();store.set("meals",meals);store.set("mealsVersion",MEALS_VERSION);}
+else if(store.get("mealsVersion",1)<MEALS_VERSION||!meals.some(m=>m.ing)){
+  // Àpats guardats d'una versió antiga (sense ingredients): els actualitzo mantenint Actiu/Fix
+  const byName={};meals.forEach(m=>byName[m.name]=m);
+  meals=freshMeals().map(m=>{const o=byName[m.name];return o?Object.assign({},m,{active:o.active,fixed:o.fixed}):m;});
+  store.set("meals",meals);store.set("mealsVersion",MEALS_VERSION);mealsUpgraded=true;
+}
+let activities=store.get("activities",null);
+if(!activities){activities=DEFAULT_ACTS.map((n,i)=>({id:"a"+i,name:n}));store.set("activities",activities);}
+let weeks=store.get("weeks",{});
+if(mealsUpgraded){
+  // Reparo les setmanes que feien servir noms d'àpats antics, conservant activitats i cafès
+  const valid=new Set(meals.map(m=>m.name));
+  Object.values(weeks).forEach(wk=>{
+    if(!wk.days)return;
+    if(wk.days.some(d=>d.lunch&&!valid.has(d.lunch))){
+      const fresh=buildWeek();
+      wk.days.forEach((d,i)=>{d.lunch=fresh[i].lunch;d.lunchDone=false;});
+      wk.shop={done:false,checked:{}};
+    }
+  });
+  store.set("weeks",weeks);
+}
+let cursor=mondayOf(new Date());
+
+const DAYNAMES=["dilluns","dimarts","dimecres","dijous","divendres","dissabte","diumenge"];
+const HARD=[0,1,2,5,6];
+
+/* ---------- Dates ---------- */
+function mondayOf(d){const x=new Date(d);const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);x.setHours(0,0,0,0);return x;}
+function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
+function fmtShort(d){return d.getDate()+" "+["gen","febr","març","abr","maig","juny","jul","ag","set","oct","nov","des"][d.getMonth()];}
+function sameDay(a,b){return key(a)===key(b);}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ---------- Sorteig equilibrat (5 dinars entre setmana) ---------- */
+function buildWeek(){
+  const days=Array.from({length:7},()=>({lunch:null,lunchDone:false,acts:[],coffee:false}));
+  const active=meals.filter(m=>m.active);
+  let freeSlots=shuffle([0,1,2,3,4]);
+  const used=new Set();const covered=new Set();
+  shuffle(active.filter(m=>m.fixed)).forEach(m=>{
+    if(!freeSlots.length)return;const s=freeSlots.pop();
+    days[s].lunch=m.name;used.add(m.name);covered.add(bucketOf(m));
+  });
+  shuffle(BUCKETS.slice()).forEach(b=>{
+    if(!freeSlots.length||covered.has(b.id))return;
+    const pool=shuffle(active.filter(m=>b.cats.includes(m.cat)&&!used.has(m.name)));
+    if(!pool.length)return;
+    const s=freeSlots.pop();days[s].lunch=pool[0].name;used.add(pool[0].name);covered.add(b.id);
+  });
+  while(freeSlots.length){
+    const s=freeSlots.pop();
+    const pool=shuffle(active.filter(m=>!used.has(m.name)));
+    const pick=pool[0]||shuffle(active)[0];
+    if(pick){days[s].lunch=pick.name;used.add(pick.name);}
+  }
+  return days;
+}
+function getWeek(){
+  const k=key(cursor);
+  if(!weeks[k])weeks[k]={days:buildWeek(),shop:{done:false,checked:{}}};
+  if(!weeks[k].shop)weeks[k].shop={done:false,checked:{}};
+  return weeks[k];
+}
+function save(){store.set("weeks",weeks);}
+
+/* ---------- Compra ---------- */
+function norm(s){return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[’'`]/g,"'").trim();}
+function weekIngredients(){
+  const wk=getWeek();const map=new Map();
+  wk.days.forEach(d=>{if(!d.lunch)return;const m=meals.find(x=>x.name===d.lunch);if(!m||!m.ing)return;
+    m.ing.split(",").forEach(raw=>{const it=raw.trim();if(!it)return;const k=norm(it);if(!map.has(k))map.set(k,it);});
+  });
+  return [...map.values()].sort((a,b)=>a.localeCompare(b,"ca"));
+}
+
+/* ---------- Dies sense fer esport ---------- */
+function daysWithoutSport(){
+  let count=0;let d=new Date();d.setHours(0,0,0,0);
+  for(let g=0;g<400;g++){
+    const wk=weeks[key(mondayOf(d))];let has=false;
+    if(wk){const idx=(d.getDay()+6)%7;const day=wk.days[idx];if(day&&day.acts.some(a=>a.done))has=true;}
+    if(has)break;count++;d=addDays(d,-1);
+  }
+  return count;
+}
+
+/* ---------- Render setmana ---------- */
+function render(){
+  const wk=getWeek();
+  document.getElementById("weekSub").textContent=fmtShort(cursor)+" – "+fmtShort(addDays(cursor,6));
+
+  const hasLunch=wk.days.some(d=>d.lunch);
+  const sb=document.getElementById("shopBanner");
+  if(hasLunch&&!wk.shop.done){
+    sb.innerHTML='<button class="topbtn" onclick="openShop()">🛒 Què he de comprar aquesta setmana<span class="arr">›</span></button>';
+  }else if(hasLunch){
+    sb.innerHTML='<div class="shopdone"><b>✓ Compra feta.</b> <button style="color:var(--brand);font-weight:600" onclick="reopenShop()">Torna a obrir la llista</button></div>';
+  }else sb.innerHTML="";
+
+  const dws=daysWithoutSport();
+  const cls=dws<=1?"":dws<=3?"warn":"bad";
+  document.getElementById("sportChip").innerHTML=
+    '<span class="chip '+cls+'">🏃 '+(dws===0?"Avui encara pots fer esport":dws+" "+(dws===1?"dia":"dies")+" sense fer esport")+'</span>';
+
+  const today=new Date();let done=0,sport=0,coffee=0;
+  const cont=document.getElementById("days");cont.innerHTML="";
+  wk.days.forEach((d,i)=>{
+    const date=addDays(cursor,i);const isToday=sameDay(date,today);const hard=HARD.includes(i);
+    if(d.lunchDone)done++;sport+=d.acts.filter(a=>a.done).length;if(d.coffee)coffee++;
+    const el=document.createElement("div");el.className="day"+(hard?" hard":"");
+    el.innerHTML=
+      '<div class="dhead"><div><div class="dname">'+DAYNAMES[i]+'</div><div class="ddate">'+fmtShort(date)+'</div></div>'+
+        (isToday?'<span class="today-pill">avui</span>':'')+
+        (hard?'<span class="hard-pill">dia clau</span>':'')+'</div>'+
+      '<div class="row"><button class="mealbtn rlabel" onclick="pickMeal('+i+')"><div class="k">Dinar</div>'+
+        '<div class="v '+(d.lunch?'':'empty')+'">'+(d.lunch||'Tria un dinar')+'</div></button>'+
+        '<button class="chk '+(d.lunchDone?'on':'')+'" onclick="toggleLunch('+i+')"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></button></div>'+
+      '<div class="acts">'+
+        d.acts.map((a,ai)=>'<div class="act '+(a.done?'on':'')+'">'+
+          '<button class="chk '+(a.done?'on':'')+'" onclick="toggleAct('+i+','+ai+')"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></button>'+
+          '<button class="time" onclick="editActTime('+i+','+ai+')">'+(a.time||'＋ hora')+'</button><span class="name">'+a.name+'</span>'+
+          '<button class="del" onclick="removeAct('+i+','+ai+')">×</button></div>').join('')+
+        '<button class="addact" onclick="pickAct('+i+')">＋ Afegeix activitat</button></div>'+
+      '<div class="coffee-row"><span style="font-size:13.5px;color:var(--muted)">Cafè</span>'+
+        '<button class="coffee-btn '+(d.coffee?'on':'')+'" onclick="toggleCoffee('+i+')">☕ '+(d.coffee?'Fet':'No')+'</button></div>';
+    cont.appendChild(el);
+  });
+  document.getElementById("sDone").textContent=done+"/5";
+  document.getElementById("sSport").textContent=sport;
+  document.getElementById("sCoffee").textContent=coffee;
+}
+
+/* ---------- Accions dia ---------- */
+function toggleLunch(i){getWeek().days[i].lunchDone^=1;save();render();}
+function toggleCoffee(i){getWeek().days[i].coffee^=1;save();render();}
+function toggleAct(i,ai){const a=getWeek().days[i].acts[ai];a.done=!a.done;save();render();}
+function removeAct(i,ai){getWeek().days[i].acts.splice(ai,1);save();render();}
+function regenerate(){if(confirm("Reorganitzar els dinars? Es perdran els canvis manuals de dinar i la llista de la compra.")){
+  weeks[key(cursor)]={days:buildWeek(),shop:{done:false,checked:{}}};save();render();}}
+function changeWeek(n){cursor=addDays(cursor,n*7);render();}
+
+/* ---------- Fulls ---------- */
+function sheetOpen(title){document.getElementById("sheetTitle").textContent=title;document.getElementById("sheet").classList.add("open");return document.getElementById("sheetBody");}
+function closeSheet(){document.getElementById("sheet").classList.remove("open");}
+
+function pickMeal(i){
+  const box=sheetOpen("Tria el dinar de "+DAYNAMES[i]);box.innerHTML="";
+  meals.filter(m=>m.active).forEach(m=>{
+    const b=document.createElement("button");b.className="opt";
+    b.innerHTML=m.name+(m.ing?'<small>'+m.ing+'</small>':'');
+    b.onclick=()=>{const wk=getWeek();wk.days[i].lunch=m.name;wk.shop.done=false;save();render();closeSheet();};
+    box.appendChild(b);
+  });
+}
+function pickAct(i){
+  const box=sheetOpen("Afegeix activitat a "+DAYNAMES[i]);box.innerHTML="";
+  if(!activities.length)box.innerHTML='<p class="psub">Encara no tens activitats. Afegeix-ne des de la pestanya Activitats.</p>';
+  activities.forEach(a=>{
+    const b=document.createElement("button");b.className="opt";b.textContent=a.name;
+    b.onclick=()=>actTimeStep(i,a.name);box.appendChild(b);
+  });
+}
+function sortActs(arr){arr.sort((a,b)=>(a.time||"99:99").localeCompare(b.time||"99:99"));}
+function timePicker(title,initial,label,onConfirm){
+  const box=sheetOpen(title);
+  box.innerHTML='<div class="timewrap"><input type="time" id="actTime" value="'+initial+'"></div><button class="sheetgo" id="actGo"></button>';
+  const go=document.getElementById("actGo");go.textContent=label;
+  go.onclick=()=>onConfirm(document.getElementById("actTime").value);
+}
+function actTimeStep(i,name){
+  timePicker("A quina hora? · "+name,"18:00","Afegeix "+name,t=>{
+    const wk=getWeek();wk.days[i].acts.push({name,time:t,done:false});
+    sortActs(wk.days[i].acts);save();render();closeSheet();
+  });
+}
+function editActTime(i,ai){
+  const a=getWeek().days[i].acts[ai];
+  timePicker("Canvia l'hora · "+a.name,a.time||"18:00","Desa l'hora",t=>{
+    a.time=t;sortActs(getWeek().days[i].acts);save();render();closeSheet();
+  });
+}
+
+function openShop(){
+  const wk=getWeek();const items=weekIngredients();
+  const box=sheetOpen("Compra de la setmana");box.innerHTML="";
+  if(!items.length){box.innerHTML='<p class="psub">Aquesta setmana no hi ha dinars amb ingredients.</p>';return;}
+  items.forEach(it=>{
+    const k=norm(it);const on=wk.shop.checked[k];
+    const b=document.createElement("button");b.className="shopitem"+(on?" on":"");
+    b.innerHTML='<span class="chk '+(on?'on':'')+'"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span><span>'+it+'</span>';
+    b.onclick=()=>{wk.shop.checked[k]=!wk.shop.checked[k];save();openShop();};
+    box.appendChild(b);
+  });
+  const go=document.createElement("button");go.className="sheetgo";go.textContent="Compra feta";
+  go.onclick=()=>{wk.shop.done=true;save();render();closeSheet();};
+  box.appendChild(go);
+}
+function reopenShop(){getWeek().shop.done=false;save();render();openShop();}
+
+/* ---------- Pestanyes ---------- */
+function showPage(p){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  document.getElementById("page-"+p).classList.add("active");
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.page===p));
+  if(p==="meals")renderMeals();if(p==="acts")renderActs();if(p==="stats")renderStats();
+  window.scrollTo(0,0);
+}
+
+/* ---------- Àpats ---------- */
+function renderMeals(){
+  const sel=document.getElementById("newMealCat");
+  if(!sel.options.length)CATS.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=CATEMOJI[c]+" "+c;sel.appendChild(o);});
+  const cont=document.getElementById("mealsList");cont.innerHTML="";
+  CATS.forEach(cat=>{
+    const items=meals.filter(m=>m.cat===cat);if(!items.length)return;
+    const h=document.createElement("div");h.className="cat";h.textContent=CATEMOJI[cat]+" "+cat;cont.appendChild(h);
+    items.forEach(m=>{
+      const c=document.createElement("div");c.className="mcard"+(m.active?"":" off");
+      c.innerHTML=
+        '<div class="mtop"><span class="mname">'+m.name+'</span>'+(m.fixed?'<span class="tag">Fix</span>':'')+'</div>'+
+        (m.ing?'<div class="ming">'+m.ing+'</div>':'')+
+        '<div class="mtools">'+
+          '<button class="mini '+(m.active?'on':'')+'" onclick="toggleActive(\''+m.id+'\')">'+(m.active?'Actiu':'Off')+'</button>'+
+          '<button class="mini fix '+(m.fixed?'on':'')+'" onclick="toggleFixed(\''+m.id+'\')">Fix 1/setm.</button>'+
+          '<button class="mdel" onclick="delMeal(\''+m.id+'\')">×</button></div>';
+      cont.appendChild(c);
+    });
+  });
+}
+function toggleActive(id){const m=meals.find(x=>x.id===id);m.active=!m.active;store.set("meals",meals);renderMeals();}
+function toggleFixed(id){const m=meals.find(x=>x.id===id);m.fixed=!m.fixed;if(m.fixed)m.active=true;store.set("meals",meals);renderMeals();}
+function delMeal(id){meals=meals.filter(x=>x.id!==id);store.set("meals",meals);renderMeals();}
+function addMeal(){
+  const n=document.getElementById("newMealName").value.trim();if(!n)return;
+  meals.push({id:"m"+Date.now(),name:n,cat:document.getElementById("newMealCat").value,
+    ing:document.getElementById("newMealIng").value.trim(),active:true,fixed:false});
+  store.set("meals",meals);document.getElementById("newMealName").value="";document.getElementById("newMealIng").value="";
+  renderMeals();
+}
+
+/* ---------- Activitats ---------- */
+function renderActs(){
+  const cont=document.getElementById("actsList");cont.innerHTML="";
+  activities.forEach(a=>{
+    const c=document.createElement("div");c.className="mcard";
+    c.innerHTML='<div class="mtop"><span class="mname">'+a.name+'</span><button class="mdel" onclick="delAct(\''+a.id+'\')">×</button></div>';
+    cont.appendChild(c);
+  });
+}
+function delAct(id){activities=activities.filter(x=>x.id!==id);store.set("activities",activities);renderActs();}
+function addActivity(){
+  const n=document.getElementById("newActName").value.trim();if(!n)return;
+  activities.push({id:"a"+Date.now(),name:n});store.set("activities",activities);
+  document.getElementById("newActName").value="";renderActs();
+}
+
+/* ---------- Estadístiques ---------- */
+function renderStats(){
+  let lunches=0,acts=0,coffees=0,wCount=0;const perAct={};
+  Object.values(weeks).forEach(wk=>{wCount++;wk.days.forEach(d=>{
+    if(d.lunchDone)lunches++;if(d.coffee)coffees++;
+    d.acts.forEach(a=>{if(a.done){acts++;perAct[a.name]=(perAct[a.name]||0)+1;}});
+  });});
+  const dws=daysWithoutSport();
+  const cls=dws<=1?"chip":dws<=3?"chip warn":"chip bad";
+  const col=dws<=1?"var(--done)":dws<=3?"var(--amber)":"var(--hard)";
+  const top=Object.entries(perAct).sort((a,b)=>b[1]-a[1]);
+  const maxv=top.length?top[0][1]:1;
+  document.getElementById("statsBody").innerHTML=
+    '<div class="streak"><div class="n" style="color:'+col+'">'+dws+'</div>'+
+      '<div><div class="l">dies seguits sense fer esport</div>'+
+      '<span class="'+cls+'" style="margin-top:6px">'+(dws===0?'Avui encara pots fer-ne':dws<=3?'Vés amb compte':'Toca moure el cos!')+'</span></div></div>'+
+    '<div class="bigstat">'+
+      '<div class="b"><div class="n" style="color:var(--done)">'+lunches+'</div><div class="l">dinars completats</div></div>'+
+      '<div class="b"><div class="n" style="color:var(--brand)">'+acts+'</div><div class="l">activitats fetes</div></div>'+
+      '<div class="b"><div class="n" style="color:var(--coffee)">'+coffees+'</div><div class="l">cafès fets</div></div>'+
+      '<div class="b"><div class="n">'+wCount+'</div><div class="l">setmanes registrades</div></div></div>'+
+    '<div class="cat" style="margin-top:20px">Activitats més fetes</div>'+
+    (top.length?top.map(([n,v])=>'<div class="barrow"><div class="bn">'+n+'</div>'+
+      '<div class="bartrack"><div class="barfill" style="width:'+Math.round(v/maxv*100)+'%"></div></div>'+
+      '<div class="barval">'+v+'</div></div>').join(''):'<p class="psub">Encara no has marcat cap activitat com a feta.</p>');
+}
+
+document.getElementById("newMealName").addEventListener("keydown",e=>{if(e.key==="Enter")addMeal();});
+document.getElementById("newMealIng").addEventListener("keydown",e=>{if(e.key==="Enter")addMeal();});
+document.getElementById("newActName").addEventListener("keydown",e=>{if(e.key==="Enter")addActivity();});
+
+render();
+</script>
+</body>
+</html>
